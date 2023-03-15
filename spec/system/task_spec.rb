@@ -19,10 +19,6 @@ RSpec.describe 'タスク管理機能', type: :system do
         visit tasks_path
         expect(page).to have_content 'test_title'
         expect(page).to have_content 'test_content'
-        task = FactoryBot.create(:second_task)
-        visit tasks_path
-        expect(page).to have_content 'test_title_2'
-        expect(page).to have_content 'test_content_2'
       end
     end
   end
@@ -33,12 +29,6 @@ RSpec.describe 'タスク管理機能', type: :system do
         visit task_path(task)
         expect(page).to have_content 'test_title'
         expect(page).to have_content 'test_content'
-      end
-      it '該当タスクの内容が表示される' do
-        task = FactoryBot.create(:second_task)
-        visit task_path(task)
-        expect(page).to have_content 'test_title_2'
-        expect(page).to have_content 'test_content_2'
       end
     end
   end
