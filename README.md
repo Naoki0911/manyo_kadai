@@ -1,24 +1,13 @@
-# README
+| Task |      |
+| ---- | ---- |
+| Column | Type |
+| id | integer |
+| title | string |
+| content | text |
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+デプロイ手順
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+1.githubにアプリをpushする
+2.heroku create アプリ名（今回はmanyo）でアプリ作成
+3.heroku login -iでherokuにログイン。パスワードはherokuのAPIキー
+4.git push heroku step2:master を実行してデプロイする。
