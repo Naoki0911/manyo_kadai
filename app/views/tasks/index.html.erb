@@ -1,15 +1,22 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Tasks</h1>
+<h1 class="my-3">Tasks</h1>
 
-<table>
+<table class="table table-hover">
+  <%= form_with(scope: :task, url: tasks_path, method: :get, local: true ) do |f| %>
+    <%= f.label :タスク名%>
+    <%= f.text_field :title, placeholder: "検索" %>
+    <%= f.label :ステータス%>
+    <%= f.select :status, ["未着手", "着手中", "完了"], include_blank: "選択して下さい" %>
+    <%= f.submit "検索", class: "btn btn-outline-secondary" %>  
+  <% end %>
   <thead>
     <tr>
-      <th>Title</th>
-      <th>Content</th>
-      <th>Limit</th>
-      <th>Status</th>
-      <th>Priority</th>
+      <th scope="col">Title</th>
+      <th scope="col">Content</th>
+      <th scope="col"><%= link_to "Limit", tasks_path(sort_limit: "true") %></th>
+      <th scope="col">Status</th>
+      <th scope="col"><%= link_to "Priority", tasks_path(sort_priority: "true") %></th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -22,14 +29,16 @@
         <td><%= task.limit %></td>
         <td><%= task.status %></td>
         <td><%= task.priority %></td>
-        <td><%= link_to 'Show', task %></td>
-        <td><%= link_to 'Edit', edit_task_path(task) %></td>
-        <td><%= link_to 'Destroy', task, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Show', task, class: "btn btn-outline-secondary" %></td>
+        <td><%= link_to 'Edit', edit_task_path(task), class: "btn btn-outline-secondary" %></td>
+        <td><%= link_to 'Destroy', task, method: :delete, class: "btn btn-outline-secondary", data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
+<%= paginate @tasks %>
+
 <br>
 
-<%= link_to 'New Task', new_task_path %>
+<%= link_to 'New Task', new_task_path, class: "btn btn-outline-secondary" %>
