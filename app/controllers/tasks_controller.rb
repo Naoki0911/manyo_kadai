@@ -3,7 +3,22 @@ class TasksController < ApplicationController
 
   # GET /tasks
   def index
-    @tasks = Task.all.order(created_at: :desc)
+    if params[:sort_limit]
+      @tasks = Task.all.order(limit: :asc).page(params[:page]).per(5)
+    elsif params[:sort_priority]
+      @tasks = Task.all.order(priority: :asc).page(params[:page]).per(5)
+    else
+      @tasks = Task.all.order(created_at: :desc).page(params[:page]).per(5)
+    end
+    if params[:task].present?
+      if params[:task][:title].present? && params[:task][:status].present?
+        @tasks = Task.where('title LIKE ?', "%#{params[:task][:title]}%").where(status: params[:task][:status]).page(params[:page]).per(5)
+      elsif  params[:task][:title].present?
+        @tasks = Task.where('title LIKE ?', "%#{params[:task][:title]}%").page(params[:page]).per(5)
+      elsif  params[:task][:status].present?
+        @tasks = Task.where(status: params[:task][:status]).page(params[:page]).per(5)
+      end
+    end
   end
 
   # GET /tasks/1
