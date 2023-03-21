@@ -4,9 +4,9 @@
 
 <table class="table table-hover">
   <%= form_with(scope: :task, url: tasks_path, method: :get, local: true ) do |f| %>
-    <%= f.label :タスク名%>
+    <%= f.label :タスク名 %>
     <%= f.text_field :title, placeholder: "検索" %>
-    <%= f.label :ステータス%>
+    <%= f.label :ステータス %>
     <%= f.select :status, ["未着手", "着手中", "完了"], include_blank: "選択して下さい" %>
     <%= f.submit "検索", class: "btn btn-outline-secondary" %>  
   <% end %>

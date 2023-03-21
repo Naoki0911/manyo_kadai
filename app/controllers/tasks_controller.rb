@@ -3,6 +3,7 @@ class TasksController < ApplicationController
 
   # GET /tasks
   def index
+    @tasks = current_user.tasks.order(created_at: :desc).page(params[:page]).per(5)
     if params[:sort_limit]
       @tasks = Task.all.order(limit: :asc).page(params[:page]).per(5)
     elsif params[:sort_priority]
@@ -37,6 +38,8 @@ class TasksController < ApplicationController
   # POST /tasks
   def create
     @task = Task.new(task_params)
+    @task.user_id = current_user.id
+    #  @task = current_user.tasks.build(task_params)
 
     if @task.save
       redirect_to @task, notice: 'Task was successfully created.'
