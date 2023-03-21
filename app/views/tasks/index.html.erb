@@ -12,6 +12,7 @@
   <% end %>
   <thead>
     <tr>
+      <th scope="col">Name</th>
       <th scope="col">Title</th>
       <th scope="col">Content</th>
       <th scope="col"><%= link_to "Limit", tasks_path(sort_limit: "true") %></th>
@@ -24,6 +25,7 @@
   <tbody>
     <% @tasks.each do |task| %>
       <tr class = "task_row">
+        <td><%= task.user.name %></td>
         <td><%= task.title %></td>
         <td><%= task.content %></td>
         <td><%= task.limit %></td>

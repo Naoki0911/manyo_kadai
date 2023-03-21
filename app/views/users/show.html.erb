@@ -3,6 +3,10 @@
 <table class="table table-hover">
   <tbody>
     <tr>
+      <th>ユーザー</th>
+      <td><%= @user.name %></td>
+    </tr>
+    <tr>
       <th>ユーザーID</th>
       <td><%= @user.id %></td>
     </tr>
@@ -24,6 +28,7 @@
   <table class="table table-hover">
     <thead class="tehad-default">
       <tr>
+        <th>制作者</th>
         <th>タイトル</th>
         <th><%= link_to "期限", tasks_path(sort_expired: "true") %></th>
         <th>ステータス</th>
@@ -35,6 +40,7 @@
     <tbody>
       <% @user.tasks.each do |t| %>
         <tr>
+          <td><%= t.user.name %></td>
           <td><%= link_to t.title, task_path(t.id),class: "task_row" %></td>
           <td><%= t.limit %></td>
           <td><%= t.status %></td>
