@@ -4,14 +4,15 @@
 
 <table class="table table-hover">
   <%= form_with(scope: :task, url: tasks_path, method: :get, local: true ) do |f| %>
-    <%= f.label :タスク名%>
+    <%= f.label :タスク名 %>
     <%= f.text_field :title, placeholder: "検索" %>
-    <%= f.label :ステータス%>
+    <%= f.label :ステータス %>
     <%= f.select :status, ["未着手", "着手中", "完了"], include_blank: "選択して下さい" %>
     <%= f.submit "検索", class: "btn btn-outline-secondary" %>  
   <% end %>
   <thead>
     <tr>
+      <th scope="col">Name</th>
       <th scope="col">Title</th>
       <th scope="col">Content</th>
       <th scope="col"><%= link_to "Limit", tasks_path(sort_limit: "true") %></th>
@@ -24,6 +25,7 @@
   <tbody>
     <% @tasks.each do |task| %>
       <tr class = "task_row">
+        <td><%= task.user.name %></td>
         <td><%= task.title %></td>
         <td><%= task.content %></td>
         <td><%= task.limit %></td>
