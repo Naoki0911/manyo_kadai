@@ -1,6 +1,8 @@
 require 'rails_helper'
 RSpec.describe 'タスク管理機能', type: :system do
   let!(:user) { FactoryBot.create(:user) }
+  let!(:label){FactoryBot.create(:label)}
+  # let!(:second_label){FactoryBot.create(:label)}
   describe '新規作成機能' do
     context 'タスクを新規作成した場合' do
       it '作成したタスクが表示される' do
@@ -14,6 +16,49 @@ RSpec.describe 'タスク管理機能', type: :system do
         click_on '登録'
         expect(page).to have_content 'new_task'
         expect(page).to have_content 'new_content'        
+      end
+    end
+    context 'タスクをラベルつきで新規作成した場合' do
+      it '作成したタスクにラベルつきで表示される' do
+        visit new_session_path
+        fill_in 'session[email]', with: 'a@gmail.com'
+        fill_in 'session[password]', with: 'password1'
+        click_button 'Log in'
+        visit new_task_path
+        fill_in 'タスク名', with: 'test title'
+        fill_in '内容', with: 'test content'
+        # fill_in '期限', with: '2023-03-10'
+        select '着手中', from: 'ステータス'
+        check 'Label1'
+        click_on '登録'
+        expect(page).to have_content 'test title'
+        expect(page).to have_content 'test content'
+        # expect(page).to have_content '2023-03-10'
+        expect(page).to have_content '着手中'
+        expect(page).to have_content 'Label1'
+      end
+    end
+  end
+  describe '編集機能' do
+    context 'タスクとラベルを編集した場合' do
+      it '編集したタスクが表示される' do
+        task = FactoryBot.create(:task, user: user)
+        visit new_session_path
+        fill_in 'session[email]', with: 'a@gmail.com'
+        fill_in 'session[password]', with: 'password1'
+        click_button 'Log in'
+        visit edit_task_path(task)
+        fill_in 'タスク名', with: 'test title'
+        fill_in '内容', with: 'test content'
+        #fill_in "期限", with: '2023-03-10'
+        select '着手中', from: 'ステータス'
+        check 'Label1'
+        click_on '更新する'
+        expect(page).to have_content 'test title'
+        expect(page).to have_content 'test content'
+        #expect(page).to have_content '2023-03-10'
+        expect(page).to have_content '着手中'
+        expect(page).to have_content 'Label1'
       end
     end
   end
@@ -114,6 +159,23 @@ RSpec.describe 'タスク管理機能', type: :system do
         sleep(0.5)
         expect(page).to have_content 'test2'
         expect(page).not_to have_content 'test1'
+      end
+    end
+  end
+  describe 'ラベル検索機能' do
+    describe 'ラベルで検索する場合' do
+      let!(:task) {FactoryBot.create(:task, user: user)}
+      let!(:task_label) { FactoryBot.create(:task_label, task: task, label: label) }
+      it '検索結果に該当するラベルが表示される' do
+        visit new_session_path
+        fill_in 'session[email]', with: 'a@gmail.com'
+        fill_in 'session[password]', with: 'password1'
+        click_button 'Log in'
+        visit tasks_path
+        fill_in 'task_label', with: 'Label1'
+        click_on '検索'
+        sleep(0.5)
+        expect(page).to have_content 'Label1'
       end
     end
   end
