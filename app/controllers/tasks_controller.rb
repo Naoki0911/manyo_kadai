@@ -1,6 +1,6 @@
 class TasksController < ApplicationController
   before_action :set_task, only: [:show, :edit, :update, :destroy]
-
+  
   # GET /tasks
   def index
     @tasks = current_user.tasks.order(created_at: :desc).page(params[:page]).per(5)
@@ -11,16 +11,23 @@ class TasksController < ApplicationController
     else
       @tasks = Task.all.order(created_at: :desc).page(params[:page]).per(5)
     end
+      
     if params[:task].present?
-      if params[:task][:title].present? && params[:task][:status].present?
-        @tasks = Task.where('title LIKE ?', "%#{params[:task][:title]}%").where(status: params[:task][:status]).page(params[:page]).per(5)
+      if params[:task][:title].present? && params[:task][:status].present? 
+        @tasks = Task.search_title(params[:task][:title]).search_status(params[:task][:status]).page(params[:page]).per(5)
       elsif  params[:task][:title].present?
-        @tasks = Task.where('title LIKE ?', "%#{params[:task][:title]}%").page(params[:page]).per(5)
+        @tasks = Task.search_title(params[:task][:title]).page(params[:page]).per(5)
       elsif  params[:task][:status].present?
-        @tasks = Task.where(status: params[:task][:status]).page(params[:page]).per(5)
+        @tasks = Task.search_status(params[:task][:status]).page(params[:page]).per(5)
+      end
+      if params[:task][:label].present?
+        @tasks = Task.search_label(params[:task][:label]).page(params[:page]).per(5)
       end
     end
   end
+
+    # binding.pry
+    # if params.dig(:task, :label).present?
 
   # GET /tasks/1
   def show
@@ -71,6 +78,6 @@ class TasksController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def task_params
-      params.require(:task).permit(:title, :content, :limit, :status, :priority)
+      params.require(:task).permit(:title, :content, :limit, :status, :priority,label_ids: [])
     end
 end
